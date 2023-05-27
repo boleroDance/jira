@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export const useMount = (callback: () => void) => {
   useEffect(() => {
@@ -26,7 +26,11 @@ export const cleanObject = (object: {[key: string]: unknown}) => {
 
 export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) => {
 
-  const oldTitle = document.title
+  const oldTitle = useRef(document.title).current
+
+  /**
+   * 通过useRef返回的ref对象在组件整个生命周期内保持不变的特性来记录旧的title值
+  */
 
   useEffect(() => {
     document.title = title
@@ -34,11 +38,11 @@ export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) =
 
 
   useEffect(() => {
+
     return () => {
       if (!keepOnUnmount) {
         document.title = oldTitle
       }
     }
-    // eslint-disable-next-line
-  }, [])
+  }, [oldTitle, keepOnUnmount]) 
 }

@@ -4,6 +4,7 @@ import { Project } from "../../@types/project";
 import { Table } from "antd";
 import dayjs from "dayjs";
 import { TableProps } from 'antd/es/Table';
+import { Link } from 'react-router-dom'
 
 interface ListProps extends TableProps<Project> {
   users: User[];
@@ -14,7 +15,10 @@ export const List = ({users, ...props}: ListProps) => {
             pagination={false} 
             columns={[{
             title: '名称',
-            dataIndex: 'name',
+            //dataIndex: 'name',
+            render(value, project) {
+              return <Link to={project.id.toString()}>{project.name}</Link>
+            },
             sorter: (a, b) => a.name.localeCompare(b.name)
             }, 
             {
