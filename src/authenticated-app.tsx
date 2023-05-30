@@ -7,6 +7,7 @@ import { ProjectScreen } from "screens/project"
 import { ReactComponent as SoftwareLogo } from 'assets/software-logo.svg'
 import { Dropdown, Menu, Button } from "antd";
 import { useAuth } from "context/auth-context";
+import { resetRoute } from "./utils"
 
 export default function AuthenticatedApp() {
 
@@ -19,8 +20,9 @@ export default function AuthenticatedApp() {
       {/* <Nav>nav</Nav> */}
       <Main>
         <Routes>
-          <Route path={'/projects'} element={<ProjectListScreen />} />
-          <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}/>
+          <Route path={'projects'} element={<ProjectListScreen />} />
+          <Route path={'projects/:projectId/*'} element={<ProjectScreen />}/>
+          <Route path="*" element={<Navigate to="/projects" replace={true}/>} />  
         </Routes>
       </Main>
       {/* <Aside>aside</Aside>
@@ -36,7 +38,9 @@ const PageHeader = () => {
 
   return <Header between={true}>
     <HeaderLeft gap={true}>
-      <SoftwareLogo width={'18rem'} color={'rgb(38, 132, 255)'} />
+      <Button type="link" onClick={resetRoute}>
+        <SoftwareLogo width={'18rem'} color={'rgb(38, 132, 255)'} />
+      </Button>
       <h3>项目</h3>
       <h3>用户</h3>
     </HeaderLeft>

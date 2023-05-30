@@ -39,7 +39,7 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
       const data = await http('me', {token})
       console.log(data)
       user = data?.user
-    }
+    } 
     return user
   }
 
