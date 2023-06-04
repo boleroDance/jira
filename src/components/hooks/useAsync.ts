@@ -25,10 +25,19 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     ...initialState
   })
 
-  const run = (promise: Promise<D>) => {
+  const [retry, SetRetry] = useState( () => () => {})
+
+  const run = (promise: Promise<D>, runConfig?: { retry: () => Promise<D>}) => {
     if (!promise || !promise.then) {
       throw new Error('请传入 promise 类型的数据')
     }
+
+    SetRetry(() => () => {
+      console.log('retry')
+      if(runConfig?.retry) {
+        run(runConfig?.retry(), runConfig)
+      }
+    })
 
     setState({
       ...state,
@@ -58,8 +67,6 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     data: null
   })
 
-
-
   return {
     isIdle: state.stat === 'idle',
     isLoading: state.stat === 'loading',
@@ -68,6 +75,8 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     run,
     setData,
     setError,
+    /**retry被调用时重新跑一遍run，注意，run应该记住需要再次调用的promise*/
+    retry,
     ...state
   }
 }

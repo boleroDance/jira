@@ -5,4 +5,5 @@ export interface Project {
   pin: boolean;
   organization: string;
   created: number;
+  checked: boolean
 }

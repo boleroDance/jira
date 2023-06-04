@@ -24,7 +24,7 @@ export const IdSelect = (props: IdSelectProps) => {
   const {value, onChange, defaultOptionName, options, ...restProps} = props
   return <Select value={toNumber(value)} 
     onChange={ val => onChange(toNumber(val) || undefined)}
-    {...restProps}
+    {...restProps} 
     >
       {
         defaultOptionName ? <Select.Option value={0}>{defaultOptionName}</Select.Option> : null
