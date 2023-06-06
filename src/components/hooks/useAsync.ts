@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useMountedRef } from "utils";
 
 interface State<D> {
   error: Error | null;
@@ -16,9 +17,25 @@ const defaultConfig = {
   throwOnError: false
 }
 
+
+
 export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defaultConfig) => {
 
   const config = {...defaultConfig, ...initialConfig}
+
+  const mountedRef = useMountedRef()
+
+  const setData = useCallback((data: D) => setState({
+    data,
+    stat: 'success',
+    error: null
+  }), [])
+
+  const setError = useCallback((error: Error) => setState({
+    error,
+    stat: 'error',
+    data: null,
+  }), [])
 
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
@@ -27,7 +44,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
 
   const [retry, SetRetry] = useState( () => () => {})
 
-  const run = (promise: Promise<D>, runConfig?: { retry: () => Promise<D>}) => {
+  const run = useCallback((promise: Promise<D>, runConfig?: { retry: () => Promise<D>}) => {
     if (!promise || !promise.then) {
       throw new Error('请传入 promise 类型的数据')
     }
@@ -39,12 +56,13 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
       }
     })
 
-    setState({
-      ...state,
+    setState(prevState => ({
+      ...prevState,
       stat: 'loading'
-    })
+    }))
 
     return promise.then(data => {
+      if (mountedRef.current)
       setData(data)
       return data
     }).catch(error => {
@@ -53,19 +71,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
       if (config.throwOnError) return Promise.reject(error)
       return error
     })
-  }
-
-  const setData = (data: D) => setState({
-    data,
-    stat: 'success',
-    error: null
-  })
-
-  const setError = (error: Error) => setState({
-    error,
-    stat: 'error',
-    data: null
-  })
+  }, [config.throwOnError, mountedRef, setData, setError])
 
   return {
     isIdle: state.stat === 'idle',
