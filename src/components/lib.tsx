@@ -32,6 +32,7 @@ export const FullPageLoading = () => <FullPage>
 </FullPage>
 
 export const FullPageErrorFallback = ({error} : {error: Error | null}) => <FullPage>
+  <ErrorBox error={error} />
   <Typography.Text>
     {error?.message}
   </Typography.Text>
@@ -40,3 +41,17 @@ export const FullPageErrorFallback = ({error} : {error: Error | null}) => <FullP
 export const ButtonNoPadding = styled(Button)`
   padding: 0
 `
+
+/**
+ * 类型守卫
+*/
+const isError = (value: any): value is Error => value?.message
+
+export const ErrorBox = ({error}: {error: unknown}) => {
+  if (isError(error)) {
+    return <Typography.Text>
+    {error?.message}
+  </Typography.Text>
+  }
+  return null
+}

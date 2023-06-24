@@ -64,13 +64,12 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
   const logout = () => auth.logout().then(() => setUser(null))
 
   return (
-    <AuthContext.Provider
+      <AuthContext.Provider
       // children={children}
       value={{ user, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>
-
     )
 }
 

@@ -6,6 +6,8 @@ import { useHttp } from "utils/http";
 import {cleanObject, useDocumentTitle, useMount } from "../../utils"
 import useKeywordsDebounce from "../../components/hooks/useKeywordsDebounce"
 import styled from "@emotion/styled";
+import { ButtonNoPadding, ErrorBox } from "components/lib"
+import { useProjectModal } from "./utils";
 import { Typography, Button } from "antd";
 import { useAsync } from "components/hooks/useAsync";
 import { useProjects } from "utils/projects";
@@ -13,7 +15,7 @@ import { useUsers } from "utils/user";
 import { Row } from "components/lib"
 const apiUrl = process.env.REACT_APP_API_URL
 
-export const ProjectListScreen = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
+export const ProjectListScreen = () => {
 
   const [param, setParam] = useState({
     name: '',
@@ -28,10 +30,10 @@ export const ProjectListScreen = (props: { setProjectModalOpen: (isOpen: boolean
   
   const debounceKeywords = useKeywordsDebounce(param, 1000)
   
-  const { isLoading, error, data: list, retry } = useProjects(debounceKeywords)
+  const { isLoading, error, data: list } = useProjects(debounceKeywords)
   //console.log(retry);
   
-
+  const { open } = useProjectModal()
 
   const { data: users } = useUsers()
 
@@ -56,11 +58,18 @@ export const ProjectListScreen = (props: { setProjectModalOpen: (isOpen: boolean
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+        <ButtonNoPadding onClick={open} type="link">创建项目</ButtonNoPadding>
+        {/* { props.projectButton } */}
       </Row>
       <SearchPanel users={users || []} param={param} setParam={setParam}/>
-      {error? <Typography.Text type={"danger"}>{error.message}</Typography.Text> : null}
-      <List setProjectModalOpen={props.setProjectModalOpen} refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}/>
+      <ErrorBox error={error}></ErrorBox>
+      <List 
+        //refresh={retry} 
+        loading={isLoading} 
+        users={users || []} 
+        dataSource={list || []}
+        //projectButton={props.projectButton}
+        />
     </Container>
   )
 }
