@@ -7,7 +7,7 @@ import {cleanObject, useDocumentTitle, useMount } from "../../utils"
 import useKeywordsDebounce from "../../components/hooks/useKeywordsDebounce"
 import styled from "@emotion/styled";
 import { ButtonNoPadding, ErrorBox } from "components/lib"
-import { useProjectModal } from "./utils";
+import { useProjectModal, useProjectsSearchParams } from "./utils";
 import { Typography, Button } from "antd";
 import { useAsync } from "components/hooks/useAsync";
 import { useProjects } from "utils/projects";
@@ -17,10 +17,12 @@ const apiUrl = process.env.REACT_APP_API_URL
 
 export const ProjectListScreen = () => {
 
-  const [param, setParam] = useState({
-    name: '',
-    personId: ''
-  })
+  const [param, setParam] = useProjectsSearchParams()
+
+  // const [param, setParam] = useState({
+  //   name: '',
+  //   personId: ''
+  // })
 
   // const client = useHttp();
 
@@ -32,6 +34,8 @@ export const ProjectListScreen = () => {
   
   const { isLoading, error, data: list } = useProjects(debounceKeywords)
   //console.log(retry);
+
+
   
   const { open } = useProjectModal()
 
