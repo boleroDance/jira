@@ -6,10 +6,10 @@ import { EpicScreen } from 'screens/epic'
 
 export const ProjectScreen = () => {
   return <div>
-    <Link to={'board'}>看板</Link>
+    <Link to={'kanban'}>看板</Link>
     <Link to={'epic'}>任务组</Link>
     <Routes>
-      <Route path={'board'} element={<BoardScreen />} />
+      <Route path={'kanban'} element={<BoardScreen />} />
       <Route path={'epic'} element={<EpicScreen />} />
       {/* <Navigate to={window.location.pathname + '/board'}/> */}
       <Route index element={<BoardScreen />} />

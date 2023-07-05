@@ -23,6 +23,11 @@ export const ProjectModal = () => {
     })
   }
 
+  const closeModal = () => {
+    form.resetFields()
+    close()
+  }
+
   useEffect(() => {
     form.setFieldsValue(editingProject)
   }, [editingProject, form])
@@ -58,7 +63,7 @@ export const ProjectModal = () => {
 
                   <Form.Item>
                     <Button style={{marginRight: 20}} loading={mutateLoading} htmlType="submit" type="primary">提交</Button>
-                    <Button onClick={close}>关闭</Button>
+                    <Button onClick={closeModal}>关闭</Button>
                   </Form.Item>
                 </Form>
               </>

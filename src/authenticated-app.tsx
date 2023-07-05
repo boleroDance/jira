@@ -26,8 +26,8 @@ export default function AuthenticatedApp() {
       <Main>
         <Routes>
           <Route path={'projects'} element={<ProjectListScreen/> } />
-          <Route path={'projects/:projectId/*'} element={<ProjectScreen />}/>
-          <Route path="*" element={<Navigate to="/projects" replace={true}/>} />  
+          <Route path={"projects/:projectId/*"} element={<ProjectScreen />} />
+          <Route index element={<ProjectListScreen />} />
         </Routes>
       </Main>
       {/* <Aside>aside</Aside>
