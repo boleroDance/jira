@@ -7,6 +7,8 @@ import styled from '@emotion/styled'
 import { SearchPanel } from './search-panel'
 import { useTasks } from 'utils/tasks'
 import { Spin } from 'antd'
+import { CreateKanban } from './create-kanban'
+import { TaskModal } from './task-modal'
 
 export const BoardScreen = () => {
   useDocumentTitle('看板列表')
@@ -23,10 +25,11 @@ export const BoardScreen = () => {
       {
         kanbans?.map(kanban => <KanbanColumn kanban={kanban} key={kanban.id} />)
       }
+      <CreateKanban />
     </ColumnsContainer>
     }
     
-    
+    <TaskModal />
   </ScreenContainer>
 }
 
@@ -37,8 +40,9 @@ const ScreenContainer = styled.div`
   flex-direction: column;
 `
 
-const ColumnsContainer = styled.div`
+export const ColumnsContainer = styled.div`
   display: flex;
   margin-top: 2rem;
+  overflow-x: scroll;
   flex: 1;
 `
