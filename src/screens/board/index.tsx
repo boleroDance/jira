@@ -45,4 +45,6 @@ export const ColumnsContainer = styled.div`
   margin-top: 2rem;
   overflow-x: scroll;
   flex: 1;
+  width: 1600px;
+  overflow-x: scroll;
 `
